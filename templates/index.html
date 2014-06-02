@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Stream</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<script src="/static/js/handlebars-v1.3.0.js" type='text/javascript'></script>
+	<script src="/static/js/jquery.min.js" type='text/javascript'></script>
+	<script src="/static/js/chat.js" type='text/javascript'></script>
+	<style>
+		.chat{
+		    list-style: none;
+		    margin: 0;
+		    padding: 0;
+		}
+
+		.chat li{
+		    margin-bottom: 10px;
+		    padding-bottom: 5px;
+		    border-bottom: 1px dotted #B3A9A9;
+		}
+
+		.chat li.left .chat-body{
+		    margin-left: 60px;
+		}
+
+		.chat li.right .chat-body{
+		    margin-right: 60px;
+		}
+
+
+		.chat li .chat-body p {
+		    margin: 0;
+		    color: #777777;
+		}
+
+		.panel .slidedown .glyphicon, .chat .glyphicon {
+		    margin-right: 5px;
+		}
+
+		.panel-body	{
+		    overflow-y: scroll;
+		    height: 500px;
+		}
+
+		::-webkit-scrollbar-track {
+		    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+		    background-color: #F5F5F5;
+		}
+
+		::-webkit-scrollbar {
+		    width: 12px;
+		    background-color: #F5F5F5;
+		}
+
+		::-webkit-scrollbar-thumb {
+		    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+		    background-color: #555;
+		}
+		
+	</style>
+<body>
+	{%raw%}
+	<script id="message-template" type="text/x-handlebars-template">
+		<li class="left clearfix">
+			<span class="chat-img pull-left">
+				<img {{gravatar src=avatar s=30}} alt="User Avatar" class="img-circle"/>
+			</span>
+			<div class="chat-body clearfix">
+				<div class="header">
+				    <strong class="primary-font">{{user}}</strong> <small class="pull-right text-muted">
+				    <span class="glyphicon glyphicon-time"></span> {{data_format date}}</small>
+				</div>
+				<p>{{message}}</p>
+			</div>
+		</li>
+	</script>
+	{%endraw%}
+	
+	<div class='container'>
+		<div class="row">
+			<div class="panel panel-primary">
+			{#Head#}
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-comment"></span> Chat
+				<div class="btn-group pull-right">
+					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+					    <span class="glyphicon glyphicon-chevron-down"></span>
+					</button>
+					<ul class="dropdown-menu slidedown">
+						<li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>Sign In</a></li>
+					</ul>
+				</div>
+			</div>
+			{#endHed#}
+			<div class="panel-body">
+				<ul id='message' class="chat"></ul>
+			</div>
+			<div class="panel-footer">
+				<div class="input-group">
+					<input type='text' id='new-message' class="form-control input-sm" placeholder="Type your message here...">
+					<span class="input-group-btn">
+						<button id='send' class="btn btn-warning btn-sm">Send message</button>
+					</span>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	
+</body>		
+</html>
