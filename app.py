@@ -1,7 +1,7 @@
 #coding: utf-8
 import datetime
 import time
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, session, redirect, url_for
 from pymongo import MongoClient, DESCENDING
 
 #http://peter-hoffmann.com/stackoverflow/12236019.html
@@ -42,7 +42,7 @@ def home():
 
 @app.route("/post", methods=['post'])
 def post():
-	user = "user@site.com"
+	user = session['user']['email']
 	time = datetime.datetime.utcnow()
 	db.messages.insert({'message':request.form['message'], 'user':user, "time":time, "avatar":gravatar(user)})
 	return Response(status=200)
@@ -58,3 +58,17 @@ def gravatar(email="user@site.com"):
 	import hashlib
 	gravatar_url = "{0}".format(hashlib.md5(email.lower()).hexdigest())
 	return gravatar_url
+
+@app.route("/login", methods=['post'])
+def login():
+	session['user'] = dict(email=request.form['email'])
+	return Response(status=200)
+
+@app.route('/logout')
+def logout():
+	session.clear()
+	return redirect(url_for('home'))
+	
+@app.context_processor
+def user_loggend():
+	return dict(user_loggend=session.get('user'))

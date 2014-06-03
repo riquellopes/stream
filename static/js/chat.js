@@ -10,11 +10,17 @@
 		this.bind()
 	};
 	
+	var uid = null;
+	
 	Chat.prototype.message = function(e){	
 		var data = JSON.parse(e.data);	
 		var source = $('#message-template').html();
 		var template = Handlebars.compile(source);
-		
+			
+			if( uid ){
+				data['uid'] = uid;
+			}
+			
 		$("#message").append( template(data) );
 	}
 	
@@ -32,8 +38,16 @@
 		console.log(">>> Close process.")
 	}
 	
+	Chat.prototype.setUid = function(value){
+		uid = value
+	}
+	
+	Chat.prototype.getUid = function(){
+		return uid;
+	}
+	
 	Chat.prototype.bind = function(){
-		$(":button").on('click', function(){
+		$("#send").on('click', function(){
 			var message = $(":text").val().trim();
 			if( message.length > 0 ){
 				$.post('/post', {'message':message});
@@ -42,13 +56,24 @@
 				alert('Write a message!');
 				$(':text').focus();
 			}
+			
 		});
 		
 		$(":text").on('keyup', function(e){
 			if( e.keyCode == 13 ){
-				$(":button").click();
+				$("button").click();
 			}
 		});	
+		
+		$("form").on("submit", function(){		
+			var email = $("#email").val().trim();
+			$.post("/login", {'email':email}).
+			  done(function(){
+				window.location.reload();
+			});
+			
+			$('form').submit(false);
+		});
 	}
 	
 	Handlebars.registerHelper("gravatar", function(o) {
@@ -63,6 +88,10 @@
 		}
 	});
 	
-$(function(){
-	new Chat('/stream');
-});
+	Handlebars.registerHelper("direction", function(email) {
+		return email == uid ? 'right' : 'left';
+	});
+	
+	Handlebars.registerHelper("pull_right", function(email) {
+		return email != uid ? 'pull-right' : '';
+	});

@@ -5,72 +5,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Stream</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/css/chat.css">
 	<script src="/static/js/handlebars-v1.3.0.js" type='text/javascript'></script>
 	<script src="/static/js/jquery.min.js" type='text/javascript'></script>
+	<script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 	<script src="/static/js/chat.js" type='text/javascript'></script>
-	<style>
-		.chat{
-		    list-style: none;
-		    margin: 0;
-		    padding: 0;
-		}
-
-		.chat li{
-		    margin-bottom: 10px;
-		    padding-bottom: 5px;
-		    border-bottom: 1px dotted #B3A9A9;
-		}
-
-		.chat li.left .chat-body{
-		    margin-left: 60px;
-		}
-
-		.chat li.right .chat-body{
-		    margin-right: 60px;
-		}
-
-
-		.chat li .chat-body p {
-		    margin: 0;
-		    color: #777777;
-		}
-
-		.panel .slidedown .glyphicon, .chat .glyphicon {
-		    margin-right: 5px;
-		}
-
-		.panel-body	{
-		    overflow-y: scroll;
-		    height: 500px;
-		}
-
-		::-webkit-scrollbar-track {
-		    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-		    background-color: #F5F5F5;
-		}
-
-		::-webkit-scrollbar {
-		    width: 12px;
-		    background-color: #F5F5F5;
-		}
-
-		::-webkit-scrollbar-thumb {
-		    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-		    background-color: #555;
-		}
-		
-	</style>
 <body>
 	{%raw%}
 	<script id="message-template" type="text/x-handlebars-template">
-		<li class="left clearfix">
-			<span class="chat-img pull-left">
+		<li class="{{direction user}} clearfix">
+			<span class="chat-img pull-{{direction user}}">
 				<img {{gravatar src=avatar s=30}} alt="User Avatar" class="img-circle"/>
 			</span>
 			<div class="chat-body clearfix">
 				<div class="header">
-				    <strong class="primary-font">{{user}}</strong> <small class="pull-right text-muted">
-				    <span class="glyphicon glyphicon-time"></span> {{data_format date}}</small>
+				    <strong class="primary-font">{{user}}</strong> 
+					<small class="{{pull_right user}} text-muted">
+				    	<span class="glyphicon glyphicon-time"></span> {{data_format date}}</small>
 				</div>
 				<p>{{message}}</p>
 			</div>
@@ -84,30 +35,45 @@
 			{#Head#}
 			<div class="panel-heading">
 				<span class="glyphicon glyphicon-comment"></span> Chat
+				{% if user_loggend %}
 				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-					    <span class="glyphicon glyphicon-chevron-down"></span>
-					</button>
-					<ul class="dropdown-menu slidedown">
-						<li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-off"></span>Sign In</a></li>
-					</ul>
+					<a href="{{url_for('logout')}}" class="btn btn-default btn-xs dropdown-toggle">
+					    <span class="glyphicon glyphicon glyphicon-off"></span>
+					</a>
 				</div>
+				{% endif %}
 			</div>
 			{#endHed#}
 			<div class="panel-body">
 				<ul id='message' class="chat"></ul>
 			</div>
 			<div class="panel-footer">
+				<form onsubmit='return false;'>
 				<div class="input-group">
+					{% if user_loggend %}
 					<input type='text' id='new-message' class="form-control input-sm" placeholder="Type your message here...">
 					<span class="input-group-btn">
-						<button id='send' class="btn btn-warning btn-sm">Send message</button>
+						<button type="button" id='send' class="btn btn-warning btn-sm">Send message</button>
 					</span>
+					{% else %}
+					<input type='email' id='email' class="form-control input-sm" placeholder="Email" required>
+					<span class="input-group-btn">
+						<button type="submit" id='sign-in' class="btn btn-warning btn-sm">Sign In</button>
+					</span>
+					{% endif %}
 				</div>
+				</form>
 			</div>
 			</div>
 		</div>
 	</div>
-	
+	<script>
+		$(function(){
+			c = new Chat('/stream');
+			{% if user_loggend %}
+				c.setUid('{{session.user.email}}')
+			{% endif %}
+		});
+	</script>
 </body>		
 </html>
