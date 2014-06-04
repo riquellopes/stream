@@ -4,6 +4,7 @@ import time
 from flask import Flask, render_template, Response, request, session, redirect, url_for
 from pymongo import MongoClient, DESCENDING
 
+#http://www.html5rocks.com/en/tutorials/eventsource/basics/
 #http://peter-hoffmann.com/stackoverflow/12236019.html
 #http://jwage.com/post/30490196727/mongodb-tailable-cursors
 #http://www.w3.org/TR/eventsource/
