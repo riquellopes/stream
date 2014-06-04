@@ -7,6 +7,7 @@ from pymongo import MongoClient, DESCENDING
 #http://peter-hoffmann.com/stackoverflow/12236019.html
 #http://jwage.com/post/30490196727/mongodb-tailable-cursors
 #http://www.w3.org/TR/eventsource/
+#https://github.com/jakubroztocil/chat
 
 app = Flask(__name__)
 app.config.from_object("settings")
