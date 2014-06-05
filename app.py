@@ -19,7 +19,7 @@ db = client['pubsub']
 def event_stream():
 	"""
 		Creating an alternative for pupsub by redis.
-		Mongo comands:
+		Mongo commands:
 		 	users pubsub
 			db.createCollection('messages', {capped:true, size: 100000})
 	"""
